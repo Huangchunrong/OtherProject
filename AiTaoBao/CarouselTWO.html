@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Jquery无缝轮播</title>
+	<link rel = "stylesheet" type="text/css" href="css/CselT.css">
+	<script type="text/javascript" src="lib/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<div class="contain">
+		<ul class="img">
+			<li><a href="#"><img src="image/focus1.png"></a></li>
+			<li><a href="#"><img src="image/focus2.png"></a></li>
+			<li><a href="#"><img src="image/focus3.png"></a></li>
+			<li><a href="#"><img src="image/focus4.png"></a></li>
+			<li><a href="#"><img src="image/focus5.png"></a></li>
+		</ul>
+		<div class="btn btn-l">&lt;</div>
+		<div class="btn btn-r">&gt;</div>
+		<ul class="num">
+			
+		</ul>
+	</div>
+<script type="text/javascript">
+     $(document).ready(function(){
+     	// 克隆第一张图片到列表的最后
+     	var rowf = $(".img li").first().clone();
+		$(".img").append(rowf); 
+		// 获取图片的个数 
+		var size = $(".img li").length;   
+		// 根据图片个数生成小圆点
+		for(var i = 0;i < size-1; i++){
+			$(".num").append("<li></li>");
+		}
+		// 给第一个li添加类 选中样式
+		$(".num li").first().addClass("on");
+		// 移动的距离
+		var width = $(".contain").width();
+		console.log(width);
+		// 声明一个常量 及定时器
+		var count = 0;
+		var timer = null;
+		// 定时器
+		timer = setInterval(function(){
+			count++;
+			move();
+			console.log(count);
+		},3000);
+
+		// 核心移动函数
+		function move(){
+			// 判断当移动到最后一张时
+			if(count >= size){
+				$(".img").css("left",0);
+				count = 1;
+			}
+			// 往左移动至最后一张时
+			if(count < 0){
+				$(".img").css("left",-width*(size-1));
+				count = size - 2;
+			}
+			// 移动的图片到
+			$(".img").animate({"left":-width*count},1000);
+
+			// 小圆点的位置判断 随图片移动
+			if(count == size-1){
+				$(".num li").eq(0).addClass("on").siblings().removeClass("on");
+			}else{
+				$(".num li").eq(count).addClass("on").siblings().removeClass("on");
+			}
+		}
+		// 点击右移
+		$(".btn-r").click(function(){
+			if(!$(".img").is(":animated")){
+				count++;
+			    move();
+			}
+			
+		});
+		// 点击左移
+		$(".btn-l").click(function(){
+			if(!$(".img").is(":animated")){
+				count--;
+				move();
+			}
+		});
+		// 悬停鼠标
+		$(".contain").hover(function(){
+			clearInterval(timer);
+		},function(){
+			timer = setInterval(function(){
+			count++;
+			move();
+			console.log(count);
+		},3000);
+		});
+		// 鼠标点击小圆点
+		$(".num li").mouseover(function(){
+			index = $(this).index();
+			console.log(index);
+			count = index;
+			move();
+		});
+     });
+</script>
+</body>
+</html>

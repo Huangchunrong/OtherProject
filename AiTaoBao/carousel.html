@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>test</title>
+	<link rel="stylesheet" type="text/css" href="css/carousel.css">
+	<script type="text/javascript" src="lib/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<div class="wrap">
+	   <div class="content">
+			<a href="#"><img src="image/focus1.png" alt=""></a>
+			<a href="#"><img src="image/focus2.png" alt=""></a>
+			<a href="#"><img src="image/focus3.png" alt=""></a>
+			<a href="#"><img src="image/focus4.png" alt=""></a>
+			<a href="#"><img src="image/focus5.png" alt=""></a>
+	   </div>
+	   <div class="btn-l"><</div>
+	   <div class="btn-r">></div>
+	   <ul>
+		   	<li class="on"></li>
+		   	<li></li>
+		   	<li></li>
+		   	<li></li>
+		   	<li></li>
+	   </ul>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var con = $(".wrap");
+			var count = $(".content a");
+			var li = $("li");
+			 // 手动控制轮播
+			 li.mouseover(function(){
+			 	$(this).addClass("on").siblings().removeClass("on");
+			 	var index = $(this).index();
+			 	    i = index;
+			 	count.eq(index).stop().fadeIn(300).siblings().stop().fadeOut(300);
+			 });
+			
+			 // 自动轮播
+			  var i = 0;
+			var t = setInterval(move,4000);	
+			function move(){
+				i++;
+				if(i > 4){
+					i = 0;
+				}
+				li.eq(i).addClass("on").siblings().removeClass("on");
+				count.eq(i).fadeIn(300).siblings().fadeOut(300);
+			}
+			// 移入移出停止播放定时器
+			con.hover(function(){
+				clearInterval(t);
+			},function(){
+				t = setInterval(move,4000);
+			});
+
+			//  左右按钮切换
+		    var j = 0;
+		 	$(".btn-l").click(function(){
+		 			j--;
+		 			if(j < 0){
+		 				j = 4;
+		 			}
+		 	li.eq(j).addClass("on").siblings().removeClass("on");
+		 	count.eq(j).fadeIn(300).siblings().fadeOut(300);
+		 });
+		 	$(".btn-r").click(function(){
+		 		move();
+		 	});
+
+		});
+		
+		
+	</script>
+</body>
+</html>
